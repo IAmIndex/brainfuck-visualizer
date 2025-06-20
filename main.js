@@ -67,7 +67,7 @@ function showMemoryBlocks(newLimiter = limiter) {
 function updatePointer(newPointer = pointer) {
     if (newPointer < 0) {
         newPointer = pointer
-    } else if (newPointer > 30) {
+    } else if (newPointer > 30000) {
         newPointer = pointer
     }
     
