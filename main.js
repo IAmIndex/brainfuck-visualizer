@@ -30,7 +30,7 @@ function createNewMemoryBlock(id) {
     const currentNode = document.createElement("div");
     currentNode.id = "block" + id.toString();
     currentNode.classList.add("memory-block");
-    currentNode.innerText = memoryBlocks[id];
+    currentNode.innerText = "[" + memoryBlocks[id] + "]";
     
     memoryBlocksContainer.append(currentNode);
 
@@ -65,10 +65,10 @@ function showMemoryBlocks(newLimiter = limiter) {
  * @param {number} newPointer The address the pointer moved to
  */
 function updatePointer(newPointer = pointer) {
-    if (pointer < 0) {
-        pointer = 0;
-    } else if (pointer > 30000) {
-        pointer = 30000;
+    if (newPointer < 0) {
+        newPointer = pointer
+    } else if (newPointer > 30) {
+        newPointer = pointer
     }
     
     const prevSelected = document.getElementById("block"+prevPointer.toString());
@@ -101,7 +101,6 @@ async function interpret(code) {
     interpretEl.ariaDisabled = true;
     stdin = inputEl.value;
     stdinTracker = 0;
-    console.log(stdin);
     let loopStart = 0;
 
     for (let i = 0; i < code.length; i++) {
