@@ -14,5 +14,4 @@ Abaixo do código, há uma seção para a visualização do output do código.
 
 ## Limitações
 - Por se tratar de uma interpretação e não compilação do código, por mais que o *delay* seja definido para 0ms, ainda haverá um pequeno tempo para que o código seja completamente varrido.
-- Ainda não há suporte para o comando de input. Ele será apenas ignorado.
 - Não foram realizadas otimizações para que hajam execuções mais rápidas do código.
