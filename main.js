@@ -2,6 +2,7 @@ const memoryBlocksContainer = document.getElementById("memory-blocks");
 const outputEl = document.getElementById("output");
 const limiterEl = document.getElementById("limiter");
 const interpretEl = document.getElementById("interpret");
+const inputEl = document.getElementById("stdin");
 
 const memoryBlocks = new Array(30000).fill(0)
 
@@ -12,7 +13,8 @@ let prevPointer = pointer;
 
 let delay = 500; // ms
 
-let stdin = [];
+let stdin = inputEl.innerText;
+let stdinTracker = 0;
 
 let stopped = false;
 let paused = false;
@@ -95,16 +97,22 @@ async function interpret(code) {
     memoryBlocks.fill(0);
     showMemoryBlocks(limiter);
     outputEl.innerHTML = '';
-    limiterEl.readOnly = true;
-    interpretEl.disabled = true;
+    limiterEl.ariaReadOnly = true;
+    interpretEl.ariaDisabled = true;
+    stdin = inputEl.value;
+    stdinTracker = 0;
+    console.log(stdin);
     let loopStart = 0;
 
     for (let i = 0; i < code.length; i++) {
         if (stopped)
             break;
 
-        while (paused)
+        while (paused) {
+            if (stopped)
+                break;
             await wait(20);
+        }
 
         const char = code[i];
         const currentBlock = document.getElementById('block' + pointer.toString());
@@ -168,6 +176,12 @@ async function interpret(code) {
                 break;
             
             case ',':
+                if (stdinTracker === stdin.length) 
+                    break;
+
+                memoryBlocks[pointer] = stdin.charCodeAt(stdinTracker);
+                stdinTracker++;
+                currentBlock.innerText = "[" + memoryBlocks[pointer] + "]";
 
                 break;
             
@@ -178,8 +192,8 @@ async function interpret(code) {
         await wait(delay)
     }
 
-    limiterEl.readOnly = false;
-    interpretEl.disabled = false;
+    limiterEl.ariaReadOnly = false;
+    interpretEl.ariaDisabled = false;
 }
 
 /**
