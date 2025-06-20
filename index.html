@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brainfuck Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="input-group">
+      <input type="number" name="limiter" id="limiter" placeholder="10 blocks" onchange="showMemoryBlocks(this.value);" min="1"/>
+      <input type="number" name="delay" id="delay" placeholder="500ms" onchange="delay = this.value;" min="1" />
+    </div>
+
+    <div id="memory-blocks"></div>
+
+    <div class="editor">
+      <textarea name="code" id="code" placeholder="Código em brainfuck"></textarea>
+      <div class="buttons">
+        <button onclick="interpret(document.getElementById('code').value);" id="interpret">Interpretar</button>
+        <!-- <button onclick="">Anterior</button>
+        <button onclick="">Próximo</button> -->
+        <button onclick="haltInterpreter();">Parar</button>
+        <button onclick="paused = !paused;">Pausar</button>
+      </div>
+    </div>
+
+    <div class="output">
+        <textarea name="output" id="output" placeholder="Output do código" readonly></textarea>
+    </div>
+  </div>
+</body>
+</html>
