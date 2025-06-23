@@ -98,6 +98,10 @@
         margin: 2% 0;
     }
 
+    .caret {
+      background-color: dodgerblue;
+    }
+
     textarea, .preview {
       width: 100%;
       height: 300px;

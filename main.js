@@ -90,6 +90,21 @@ function updatePointer(newPointer = pointer) {
     prevPointer = newPointer;
 }
 
+function highlightCodeSection(prevText, char, postText) {
+    const prevHighlighted = document.getElementsByClassName("caret");
+
+    for (const element of prevHighlighted) {
+        previewEl.removeChild(element);
+    }
+
+    const spanElement = document.createElement("span");
+    spanElement.classList.add("caret");
+    spanElement.innerText = char;
+
+    previewEl.innerHTML = '';
+    previewEl.append(prevText, spanElement, postText);
+}
+
 /**
  * Interprets the brainfuck code
  * @param {string} code The brainfuck code
@@ -123,12 +138,14 @@ async function interpret(code) {
             await wait(20);
         }
 
-        codeEl.focus();
-        codeEl.setSelectionRange(i, i+1);
-
+        const prevText = code.slice(0, i);
         const char = code[i];
+        const postText = code.slice(i+1);
+
         const currentBlock = document.getElementById('block' + pointer.toString());
         const numberStored = memoryBlocks[pointer];
+
+        highlightCodeSection(prevText, char, postText);
 
         switch (char) {
             case '+':
