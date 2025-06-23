@@ -3,6 +3,7 @@ const outputEl = document.getElementById("output");
 const limiterEl = document.getElementById("limiter");
 const interpretEl = document.getElementById("interpret");
 const inputEl = document.getElementById("stdin");
+const codeEl = document.getElementById("code");
 
 const memoryBlocks = new Array(30000).fill(0)
 
@@ -96,11 +97,16 @@ async function interpret(code) {
     updatePointer(0);
     memoryBlocks.fill(0);
     showMemoryBlocks(limiter);
+
     outputEl.innerHTML = '';
-    limiterEl.ariaReadOnly = true;
-    interpretEl.ariaDisabled = true;
+
+    limiterEl.readOnly = true;
+    codeEl.readOnly = true;
+    interpretEl.disabled = true;
+
     stdin = inputEl.value;
     stdinTracker = 0;
+
     let loopStart = 0;
 
     for (let i = 0; i < code.length; i++) {
@@ -112,6 +118,9 @@ async function interpret(code) {
                 break;
             await wait(20);
         }
+
+        codeEl.focus();
+        codeEl.setSelectionRange(i, i+1);
 
         const char = code[i];
         const currentBlock = document.getElementById('block' + pointer.toString());
@@ -191,8 +200,9 @@ async function interpret(code) {
         await wait(delay)
     }
 
-    limiterEl.ariaReadOnly = false;
-    interpretEl.ariaDisabled = false;
+    limiterEl.readOnly = false;
+    interpretEl.disabled = false;
+    codeEl.readOnly = false;
 }
 
 /**
@@ -211,4 +221,5 @@ async function haltInterpreter() {
     stopped = true;
     await wait(delay + 20);
     stopped = false;
+    paused = false;
 }
