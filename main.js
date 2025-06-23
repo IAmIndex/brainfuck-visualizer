@@ -4,6 +4,7 @@ const limiterEl = document.getElementById("limiter");
 const interpretEl = document.getElementById("interpret");
 const inputEl = document.getElementById("stdin");
 const codeEl = document.getElementById("code");
+const previewEl = document.getElementById("preview")
 
 const memoryBlocks = new Array(30000).fill(0)
 
@@ -101,8 +102,11 @@ async function interpret(code) {
     outputEl.innerHTML = '';
 
     limiterEl.readOnly = true;
-    codeEl.readOnly = true;
+    codeEl.hidden = true;
     interpretEl.disabled = true;
+    previewEl.hidden = false;
+
+    previewEl.innerHTML = code;
 
     stdin = inputEl.value;
     stdinTracker = 0;
@@ -201,8 +205,9 @@ async function interpret(code) {
     }
 
     limiterEl.readOnly = false;
+    codeEl.hidden = false;
     interpretEl.disabled = false;
-    codeEl.readOnly = false;
+    previewEl.hidden = true;
 }
 
 /**
