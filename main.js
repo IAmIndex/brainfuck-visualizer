@@ -90,6 +90,12 @@ function updatePointer(newPointer = pointer) {
     prevPointer = newPointer;
 }
 
+/**
+ * 
+ * @param {string} prevText The text previous to the current character to be highlighted
+ * @param {string} char The current character to highlight
+ * @param {string} postText The text after the highlighted character
+ */
 function highlightCodeSection(prevText, char, postText) {
     const prevHighlighted = document.getElementsByClassName("caret");
 
@@ -106,6 +112,40 @@ function highlightCodeSection(prevText, char, postText) {
 }
 
 /**
+ * 
+ * @param {string} code The code to have its loops indexed
+ * @returns {number[]} An array with the position of the loops
+ */
+function indexLoops(code) {
+    const stack = [];
+    const loopIndices = [];
+
+    for (let i = 0; i<code.length; i++) {
+        const char = code[i];
+
+        if (char === '[') {
+            stack.push(i);
+        } else if (char === ']') {
+            if (stack.length === 0) {
+                alert(`Syntax error: Unmatched closing bracket ']' at index ${i}`);
+                haltInterpreter();
+            }
+            
+            const start = stack.pop();
+            loopIndices[start] = i;
+            loopIndices[i] = start;
+        }
+    }
+
+    if (stack.length > 0) {
+        alert(`Syntax error: Unmatched opening bracket '[' at index ${stack[0]}`);
+        haltInterpreter();
+    }
+
+    return loopIndices;
+}
+
+/**
  * Interprets the brainfuck code
  * @param {string} code The brainfuck code
  */
@@ -113,6 +153,8 @@ async function interpret(code) {
     updatePointer(0);
     memoryBlocks.fill(0);
     showMemoryBlocks(limiter);
+
+    let loopIndices = indexLoops(code);
 
     outputEl.innerHTML = '';
 
@@ -125,8 +167,6 @@ async function interpret(code) {
 
     stdin = inputEl.value;
     stdinTracker = 0;
-
-    let loopStart = 0;
 
     for (let i = 0; i < code.length; i++) {
         if (stopped)
@@ -172,28 +212,17 @@ async function interpret(code) {
             
             case '[':
                 if (numberStored != 0) {
-                    loopStart = i;
                     continue;
                 } else {
                     // Jump
-                    for (let j = i; j<code.length; j++) {
-                        if (code[j] === ']') {
-                            i = j;
-                            break;
-                        }
-                    }
-
-                    if (i === loopStart){
-                        alert("Syntax error!");
-                        return;
-                    }
+                    i = loopIndices[i];
                 }
 
                 break;
             
             case ']':
                 if (numberStored != 0) {
-                    i = loopStart-1;
+                    i = loopIndices[i];
                     continue;
                 }
 
