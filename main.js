@@ -76,7 +76,8 @@ function updatePointer(newPointer = pointer) {
     const prevSelected = document.getElementById("block"+prevPointer.toString());
     let newSelected = document.getElementById("block"+newPointer.toString());
     
-    prevSelected.classList.remove("selected");
+    if (prevSelected)
+        prevSelected.classList.remove("selected");
     
     if (newSelected) {
         newSelected.classList.add("selected");
