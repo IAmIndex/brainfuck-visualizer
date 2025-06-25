@@ -35,8 +35,9 @@
         <textarea name="code" id="code" placeholder="Código em brainfuck"></textarea>
         <div class="buttons">
           <button onclick="interpret(document.getElementById('code').value);" id="interpret">Interpretar</button>
-          <button onclick="haltInterpreter();">Parar</button>
-          <button onclick="paused = !paused;">Pausar</button>
+          <button onclick="haltInterpreter();" id="halt" disabled="true">Parar</button>
+          <button onclick="nextStep();" id="step" disabled="true">Passo</button>
+          <button onclick="pauseInterpreter();" id="pause" disabled="true">Pausar</button>
         </div>
       </div>
 

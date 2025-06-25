@@ -1,10 +1,14 @@
 const memoryBlocksContainer = document.getElementById("memory-blocks");
 const outputEl = document.getElementById("output");
 const limiterEl = document.getElementById("limiter");
-const interpretEl = document.getElementById("interpret");
 const inputEl = document.getElementById("stdin");
 const codeEl = document.getElementById("code");
 const previewEl = document.getElementById("preview")
+
+const interpretEl = document.getElementById("interpret");
+const haltEl = document.getElementById("halt");
+const stepEl = document.getElementById("step");
+const pauseEl = document.getElementById("pause");
 
 const memoryBlocks = new Array(30000).fill(0)
 
@@ -20,6 +24,7 @@ let stdinTracker = 0;
 
 let stopped = false;
 let paused = false;
+let step = false;
 
 showMemoryBlocks(limiter);
 
@@ -161,7 +166,11 @@ async function interpret(code) {
 
     limiterEl.readOnly = true;
     codeEl.hidden = true;
+    
     interpretEl.disabled = true;
+    pauseEl.disabled = false;
+    haltEl.disabled = false;
+    
     previewEl.hidden = false;
 
     previewEl.innerHTML = code;
@@ -174,9 +183,9 @@ async function interpret(code) {
             break;
 
         while (paused) {
-            if (stopped)
+            if (stopped || step)
                 break;
-            await wait(20);
+            await wait(10);
         }
 
         const prevText = code.slice(0, i);
@@ -253,7 +262,11 @@ async function interpret(code) {
 
     limiterEl.readOnly = false;
     codeEl.hidden = false;
+    
     interpretEl.disabled = false;
+    pauseEl.disabled = true;
+    haltEl.disabled = true;
+    
     previewEl.hidden = true;
 }
 
@@ -274,4 +287,15 @@ async function haltInterpreter() {
     await wait(delay + 20);
     stopped = false;
     paused = false;
+}
+
+function pauseInterpreter() {
+    paused = !paused;
+    stepEl.disabled = !paused;
+}
+
+async function nextStep() {
+    step = true;
+    await wait(Math.max(100, delay));
+    step = false;
 }
