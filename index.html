@@ -10,28 +10,42 @@
 <body>
   <div class="container">
     <div class="input-group">
-      <input type="number" name="limiter" id="limiter" placeholder="# of blocks" onchange="showMemoryBlocks(this.value);" min="1"/>
-      <input type="number" name="delay" id="delay" placeholder="Delay (ms)" onchange="delay = this.value;" min="1"/>
+      <div class="form-control">
+        <label for="limiter">Número de blocos de memória</label>
+        <input type="number" name="limiter" id="limiter" placeholder="Ex: 30" onchange="showMemoryBlocks(this.value);" min="1" />
+      </div>
+
+      <div class="form-control">
+        <label for="delay">Atraso entre instruções (ms)</label>
+        <input type="number" name="delay" id="delay" placeholder="Ex: 100" onchange="delay = this.value;" min="1" />
+      </div>
+
+      <div class="form-control">
+        <label for="stdin">Entrada (stdin)</label>
+        <input type="text" name="stdin" id="stdin" placeholder="Ex: 123" autocomplete="off" />
+      </div>
     </div>
 
     <div id="memory-blocks"></div>
 
-    <div class="editor">
-      <div class="preview" id="preview" hidden="true"></div>
-      <textarea name="code" id="code" placeholder="Código em brainfuck"></textarea>
-      <div class="buttons">
-        <button onclick="interpret(document.getElementById('code').value);" id="interpret">Interpretar</button>
-        <!-- <button onclick="">Anterior</button>
-        <button onclick="">Próximo</button> -->
-        <button onclick="haltInterpreter();">Parar</button>
-        <button onclick="paused = !paused;">Pausar</button>
+    <div class="editor-output-wrapper">
+      <div class="editor">
+        <label for="code">Código em brainfuck</label>
+        <div class="preview" id="preview" hidden="true"></div>
+        <textarea name="code" id="code" placeholder="Código em brainfuck"></textarea>
+        <div class="buttons">
+          <button onclick="interpret(document.getElementById('code').value);" id="interpret">Interpretar</button>
+          <button onclick="haltInterpreter();">Parar</button>
+          <button onclick="paused = !paused;">Pausar</button>
+        </div>
+      </div>
+
+      <div class="output">
+        <label for="output">Saída do código</label>
+        <textarea name="output" id="output" placeholder="Output do código" readonly></textarea>
       </div>
     </div>
 
-    <div class="output">
-        <textarea name="output" id="output" placeholder="Output do código" readonly></textarea>
-        <input type="text" name="stdin" id="stdin" placeholder="Exemplo 123" autocomplete="off">
-    </div>
   </div>
 </body>
 </html>
